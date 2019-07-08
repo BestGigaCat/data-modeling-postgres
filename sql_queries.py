@@ -38,7 +38,7 @@ song_table_create = ("""
         title VARCHAR(255), 
         artist_id VARCHAR(255), 
         year INT, 
-        duration DOUBLE,
+        duration DOUBLE PRECISION,
         PRIMARY KEY (song_id));
 """)
 
@@ -47,8 +47,8 @@ artist_table_create = ("""
         artist_id VARCHAR(255), 
         name VARCHAR(255), 
         location VARCHAR(255), 
-        lattitude DOUBLE, 
-        longitude DOUBLE,
+        lattitude DOUBLE PRECISION, 
+        longitude DOUBLE PRECISION,
         PRIMARY KEY (artist_id));
 """)
 
@@ -100,8 +100,8 @@ ON CONFLICT (start_time) DO NOTHING;
 
 song_select = ("""
     SELECT s.song_id, a.artist_id
-    FROM songs s, users u
-    WHERE s.artist_id = u.artist_id
+    FROM songs s, artists a
+    WHERE s.artist_id = a.artist_id
     AND a.name = (%s) 
     AND s.title = (%s) 
     AND s.duration = (%s);

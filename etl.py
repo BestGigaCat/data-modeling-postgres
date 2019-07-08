@@ -6,21 +6,33 @@ from sql_queries import *
 
 
 def process_song_file(cur, filepath):
+    """
 
+    Process data for song and artists
+
+    :param cur: cursor
+    :param filepath: song and artist file path
+    """
     print("Loading file %s in process_song_file...\n", filepath)
 
     # open song file
     df = pd.read_json(filepath, lines=True)
 
     # insert song record
-    cur.execute(song_table_insert, (df['song_id'], df['title'], df['artist_id'], df['year'], df['duration']))
+    cur.execute(song_table_insert, (df['song_id'][0], df['title'][0], df['artist_id'][0], int(df['year'][0]), df['duration'][0]))
 
     # insert artist record
-    cur.execute(artist_table_insert, df['artist_id'], df['artist_name'], df['artist_location'], df['artist_latitude'], df['artist_longitude'])
+    cur.execute(artist_table_insert, (df['artist_id'][0], df['artist_name'][0], df['artist_location'][0], df['artist_latitude'][0], df['artist_longitude'][0]))
 
 
 def process_log_file(cur, filepath):
+    """
 
+    Process log file.
+
+    :param cur: cursor
+    :param filepath: log file path
+    """
     print("Loading file %s in process_log_file...\n", filepath)
 
     # open log file
@@ -53,6 +65,14 @@ def process_log_file(cur, filepath):
 
 
 def process_data(cur, conn, filepath, func):
+    """
+    Generic data processing function for inserting data to all tables.
+
+    :param cur: cursor
+    :param conn: db connection
+    :param filepath: file path where the data to be inserted stays
+    :param func: data processing function
+    """
     # get all files matching extension from directory
     all_files = []
     for root, dirs, files in os.walk(filepath):
